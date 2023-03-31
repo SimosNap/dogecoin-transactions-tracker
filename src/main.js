@@ -157,7 +157,6 @@ async function handleBlock(blockHash) {
         console.log('RECIPIENTS: ', JSON.stringify(outputs));
         console.log('SENDERS: ', JSON.stringify(inputs));
         console.log('DOGE/USD: ', JSON.stringify(dogeUSD));
-        insertTransaction(txid, JSON.stringify(outputs), txAmount, JSON.stringify(dogeUSD), datetime, JSON.stringify(inputs));
         console.log('-------------------------------------------------------------------');
 
         const isSameAddress = (inputs, outputs) => inputs.address === outputs.address;
