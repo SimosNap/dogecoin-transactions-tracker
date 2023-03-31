@@ -159,12 +159,40 @@ async function handleBlock(blockHash) {
         console.log('DOGE/USD: ', JSON.stringify(dogeUSD));
         insertTransaction(txid, JSON.stringify(outputs), txAmount, JSON.stringify(dogeUSD), datetime, JSON.stringify(inputs));
         console.log('-------------------------------------------------------------------');
-        returnBlocks.push({
+
+        const isSameAddress = (inputs, outputs) => inputs.address === outputs.address;
+
+        // Get items that only occur in the left array,
+        // using the compareFunction to determine equality.
+        // goal is exclude from logging transactions matched as big when the amount is
+        // due a big unspent amount. This may need a review and may depend on what you want to log
+        const onlyInLeft = (left, right, compareFunction) =>
+          left.filter(leftValue =>
+            !right.some(rightValue =>
+              compareFunction(leftValue, rightValue)));
+
+        const onlyInSend = onlyInLeft(inputs, outputs, isSameAddress);
+        const onlyInRec = onlyInLeft(outputs, inputs, isSameAddress);
+
+        const res = [...onlyInRec];
+        console.log(res);
+
+        const sum = res.reduce((accumulator, ob) => {
+          return accumulator + ob.amount;
+        }, 0);
+        console.log(sum);
+
+        //skip database insertion if amount of transaction excluding unstpent is under 1.000.000 Dogecoin
+        if (sum < 1000000) { continue; }
+
+        insertTransaction(txid, JSON.stringify(outputs), txAmount, JSON.stringify(dogeUSD), datetime, JSON.stringify(inputs));
+
+        /*returnBlocks.push({
             inputs,
             outputs,
             dogeUSD,
             blockTime,
-        })
+        })*/
     }
     //console.log(returnBlocks);
     //return returnBlocks;
