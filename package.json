@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "base-64": "^1.0.0",
+    "child_process": "^1.0.2",
+    "http": "^0.0.1-security",
+    "jayson": "^4.0.0",
+    "mysql": "^2.18.1",
+    "node-fetch": "^2.6.9"
+  }
+}
